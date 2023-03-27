@@ -1,0 +1,209 @@
+<TaskPopup>:
+    orientation: 'vertical'
+
+    Label:
+        size_hint: (1, 0.6)
+        halign: 'center'
+        valign: 'center'
+        text: root.task_text
+        text_size: (self.width, None)
+
+    BoxLayout:
+        size_hint: (1, 0.4)
+        Button:
+            text: 'Ano'
+            on_press: root.dispatch('on_answer', True)
+        Button:
+            text: 'Ne'
+            on_press: root.dispatch('on_answer', False)
+
+<CalendarWidget>:
+    day_num: day_num_id
+    day_of_week: day_of_week_id
+    month: month_id
+    month_cal: month_cal_id
+
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    Label:
+        size_hint: 1, 0.15
+
+    Label:
+        id: day_of_week_id
+        size_hint: 1, 0.1
+        valign: 'top'
+        font_size: '40dp'
+        font_name: 'Roboto-Light'
+
+    Label:
+        id: day_num_id
+        size_hint: 1, 0.3
+        halign: 'center'
+        font_size: '150dp'
+        font_name: 'Roboto-Black'
+
+    Label:
+        id: month_id
+        size_hint: 1, 0.1
+        font_size: '30dp'
+        font_name: 'Roboto-Light'
+
+    MonthWidget:
+        id: month_cal_id
+        size_hint: 1, 0.3
+        font_size: '20dp'
+        font_name: 'FreeMonoBold'
+
+    Label:
+        size_hint: 1, 0.05
+
+<TasksWidget>:
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    padding: (10, 20, 0, 0)
+    orientation: 'vertical'
+
+    Label:
+        pos: 0, 0
+        size_hint: 1, 0.15
+
+        canvas.before:
+            Color:
+                rgba: 0, 0, 0, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        text: 'Úkoly'
+        text_size: self.width - 20, None
+        font_name: 'Roboto-Light'
+        font_size: '40dp'
+        halign: 'left'
+
+    TasksListWidget:
+        size_hint: 1, 0.6
+
+        canvas.before:
+            Color:
+                rgb: 0, 0, 0
+            Line:
+                points: ((0, 0), (self.width, 0))
+
+    WeatherWidget:
+        size_hint: 1, 0.25
+
+
+<TaskWidget>:
+    priority: priority_widget_id
+    due: due_widget_id
+
+    canvas.before:
+        Color:
+            rgb: 0, 0, 0
+        Line:
+            points: [self.pos, (self.x + self.width, self.y)]
+
+    PriorityWidget:
+        id: priority_widget_id
+        size_hint: (0.1, 1)
+
+    Label:
+        size_hint: (0.7, 1)
+
+        text: root.task_text
+        text_size: self.width - 20, None
+        halign: 'left'
+        color: 'black'
+        font_name: 'tahoma'
+        font_size: '17dp'
+
+    DateWidget:
+        id: due_widget_id
+        size_hint: (0.3, None)
+        height: root.height * 0.8
+
+
+<PriorityWidget>:
+    canvas.before:
+        Color:
+            rgb: 0, 0, 0
+        Ellipse:
+            pos: (13, 11)
+            size: (self.height / 2, self.height / 2)
+
+    Label:
+        text: root.text
+        font_name: 'Roboto-Black'
+        color: 'white'
+
+
+<DateWidget>:
+    canvas.before:
+        Color:
+            rgb: self.bg_color
+        Rectangle:
+            pos: self.pos
+            size: (self.width, .8 * self.height)
+
+    color: 'white'
+
+
+
+<ClockWidget>:
+    time_label: time_label_id
+    
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        id: time_label_id
+        markup: True
+        size_hint: (1, 1)
+        font_name: 'Roboto-Black'
+        text: 'PLACEHOLDER'
+
+
+<CarouselWidget>:
+    direction: 'right'
+    loop: True
+
+    TasksWidget
+    ClockWidget
+
+
+<AppWidget>:
+    calendar_widget: calendar_widget_id
+    carousel_widget_id: carousel_widget_id
+
+    orientation: 'horizontal'
+    Slider:
+        orientation: 'vertical'
+        size_hint: (0.02, 1)
+        on_value: root.backlight.brightness = self.value**2 / 100
+        min: 10
+        max: 100
+
+    CalendarWidget:
+        id: calendar_widget_id
+        size_hint: (0.373, 1)
+
+    CarouselWidget:
+        id: carousel_widget_id
+        size_hint: (0.625, 1)
+
