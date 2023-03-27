@@ -68,7 +68,6 @@ class TasksListWidget(RelativeLayout):
 
         self.clear_content()
         tasks = self.todoist.todo_list
-        print('NOVY CONTENT!', tasks)
         for i, task in enumerate(tasks):
             widget = TaskWidget(
                 task=task,
@@ -83,7 +82,6 @@ class TasksListWidget(RelativeLayout):
         self.clear_widgets()
 
     def on_close_task(self, instance, value):
-        print('TasksListWidget: zaviram')
         self.todoist.close_task(value)
 
 
@@ -122,7 +120,6 @@ class TaskWidget(BoxLayout):
     def popup_answer(self, close: bool, popup: 'Popup'):
         popup.dismiss()
         if close:
-            print('TaskWidget: zaviram')
             self.dispatch('on_close_task', self.task_id)
 
     def on_close_task(self, *args):
