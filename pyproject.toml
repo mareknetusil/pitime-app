@@ -6,9 +6,9 @@ authors = ["netusil <m.netusil@mikrovox.cz>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-kivy = "^2.1.0"
+python = "^3.7"
 rpi-backlight = "^2.6.0"
+kivy = {extras = ["base"], version = "^2.1.0"}
 
 
 [build-system]
