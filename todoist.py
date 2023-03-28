@@ -5,15 +5,18 @@ import requests
 class TODOIST:
     TOKEN = '19f0a1e5c139912f193a6011131b4be9c25e2146'
     URL = "https://api.todoist.com/rest/v2/tasks"
+    TIMEOUT = 3
 
     def __init__(self):
         self.todo_list = None
 
     def query_todo_list(self):
         try:
-            data = requests.get(TODOIST.URL, headers={
-                'Authorization': f'Bearer {TODOIST.TOKEN}'
-            })
+            data = requests.get(
+                TODOIST.URL,
+                headers={'Authorization': f'Bearer {self.TOKEN}'},
+                timeout=self.TIMEOUT
+            )
             new_todo_list = data.json()
         except requests.ConnectionError as e:
             log.critical('Chyba pripojeni!')
@@ -27,12 +30,13 @@ class TODOIST:
         else:
             return False
 
-    @staticmethod
-    def close_task(task_id: str) -> bool:
+    def close_task(self, task_id: str) -> bool:
         try:
             resp = requests.post(
                 f'{TODOIST.URL}/{task_id}/close',
-                headers={'Authorization': f'Bearer {TODOIST.TOKEN}'})
+                headers={'Authorization': f'Bearer {self.TOKEN}'},
+                timeout=self.TIMEOUT
+            )
         except requests.ConnectionError as e:
             log.critical('Chyba pripojeni!')
             return False
