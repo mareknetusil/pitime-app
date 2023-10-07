@@ -24,8 +24,11 @@ except (FileNotFoundError, ModuleNotFoundError):
     Blacklight = BlacklightDummy
 
 
-from todoist import TODOIST
+from todoist import BasicTodoist
 # from weather import Weather
+
+if tp.TYPE_CHECKING:
+    from todoist import Todoist, Todos
 
 
 class CalendarWidget(BoxLayout):
@@ -55,19 +58,16 @@ class TasksListWidget(RelativeLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Clock.schedule_interval(self.update, 10)
-        self.todoist = TODOIST()
-        self.update_tasks()
+        self.todoist: 'Todoist' = BasicTodoist(timeout=3)
+        self.todoist.add_subscriber(self.update_tasks)
+        self.todoist.run()
 
     def update(self, delta):
-        self.update_tasks()
+        self.todoist.update()
 
-    def update_tasks(self):
-        if not self.todoist.query_todo_list():
-            return
-
+    def update_tasks(self, tasks: 'Todos'):
         self.clear_content()
-        tasks = self.todoist.todo_list
+        # tasks = self.todoist.todo_list
         for i, task in enumerate(tasks):
             widget = TaskWidget(
                 task=task,
@@ -199,7 +199,7 @@ class CalendarApp(App):
 
 
 if __name__ == '__main__':
-    locale.setlocale(locale.LC_TIME, 'cs_CZ.utf8')
+    # locale.setlocale(locale.LC_TIME, 'cs_CZ.utf8')
     LabelBase.register(name='Roboto-Black', fn_regular='fonts/Roboto-Black.ttf')
     LabelBase.register(name='Roboto-Light', fn_regular='fonts/Roboto-Light.ttf')
     LabelBase.register(name='tahoma', fn_regular='fonts/tahoma.ttf')
