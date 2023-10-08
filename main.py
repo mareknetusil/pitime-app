@@ -3,6 +3,8 @@ import datetime as dt
 import locale
 import typing as tp
 
+from dotenv import load_dotenv
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.relativelayout import RelativeLayout
@@ -67,7 +69,6 @@ class TasksListWidget(RelativeLayout):
 
     def update_tasks(self, tasks: 'Todos'):
         self.clear_content()
-        # tasks = self.todoist.todo_list
         for i, task in enumerate(tasks):
             widget = TaskWidget(
                 task=task,
@@ -199,6 +200,8 @@ class CalendarApp(App):
 
 
 if __name__ == '__main__':
+    load_dotenv()
+
     # locale.setlocale(locale.LC_TIME, 'cs_CZ.utf8')
     LabelBase.register(name='Roboto-Black', fn_regular='fonts/Roboto-Black.ttf')
     LabelBase.register(name='Roboto-Light', fn_regular='fonts/Roboto-Light.ttf')

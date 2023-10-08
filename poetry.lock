@@ -156,6 +156,17 @@ python-versions = "*"
 pywin32 = ">=223"
 
 [[package]]
+name = "python-dotenv"
+version = "1.0.0"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 name = "pywin32"
 version = "306"
 description = "Python for Window Extensions"
@@ -233,7 +244,7 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "24d9400bb59b0aabf6ee0fba3ce3dfc7dc1d51efd48aefd7ed281773448ed2c2"
+content-hash = "eb619a78883778be47f1719eb1d9d3163ccb8335378e16d9e7643b5e5e52235e"
 
 [metadata.files]
 certifi = []
@@ -250,6 +261,7 @@ mypy-extensions = []
 pillow = []
 pygments = []
 pypiwin32 = []
+python-dotenv = []
 pywin32 = []
 requests = []
 rpi-backlight = []

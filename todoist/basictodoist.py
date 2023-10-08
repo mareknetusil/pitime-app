@@ -1,4 +1,5 @@
 import logging as log
+import os
 import typing as tp
 
 import requests
@@ -11,9 +12,6 @@ if tp.TYPE_CHECKING:
 
 
 class BasicTodoist(Todoist):
-    TOKEN = '19f0a1e5c139912f193a6011131b4be9c25e2146'
-    URL = "https://api.todoist.com/rest/v2/tasks"
-
     def __init__(self, timeout: int = 3):
         self.todo_list: Todos = []
         self._subscribers: list[tp.Callable] = []
@@ -33,8 +31,8 @@ class BasicTodoist(Todoist):
     def query_todo_list(self):
         try:
             data = requests.get(
-                BasicTodoist.URL,
-                headers={'Authorization': f'Bearer {self.TOKEN}'},
+                os.getenv('TODOIST_URL'),
+                headers={'Authorization': f'Bearer {os.getenv("TODOIST_TOKEN")}'},
                 timeout=self.timeout
             )
             new_todo_list = data.json()
@@ -60,8 +58,8 @@ class BasicTodoist(Todoist):
     def close_task(self, task_id: str) -> bool:
         try:
             resp = requests.post(
-                f'{BasicTodoist.URL}/{task_id}/close',
-                headers={'Authorization': f'Bearer {self.TOKEN}'},
+                f'{os.getenv("TODOIST_URL")}/{task_id}/close',
+                headers={'Authorization': f'Bearer {os.getenv("TODOIST_TOKEN")}'},
                 timeout=self.timeout
             )
         except requests.ConnectionError as e:
