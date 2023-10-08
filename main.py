@@ -26,7 +26,7 @@ except (FileNotFoundError, ModuleNotFoundError):
     Blacklight = BlacklightDummy
 
 
-from todoist import BasicTodoist
+from todoist import KivyTodoist
 # from weather import Weather
 
 if tp.TYPE_CHECKING:
@@ -60,7 +60,7 @@ class TasksListWidget(RelativeLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.todoist: 'Todoist' = BasicTodoist(timeout=3)
+        self.todoist: 'Todoist' = KivyTodoist(timeout=3)
         self.todoist.add_subscriber(self.update_tasks)
         self.todoist.run()
 
