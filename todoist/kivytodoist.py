@@ -57,7 +57,7 @@ class KivyTodoist(Todoist):
         )
 
     @staticmethod
-    def __get_date(task: dict[str, tp.Any]) -> str:
+    def __get_date(task: tp.Dict[str, tp.Any]) -> str:
         try:
             return task['due']['date']
         except KeyError:

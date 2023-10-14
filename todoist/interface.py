@@ -2,7 +2,7 @@ import dataclasses as dc
 import typing as tp
 
 
-Todos = list[dict[str, tp.Any]]
+Todos = tp.List[tp.Dict[str, tp.Any]]
 
 
 class Todoist:
