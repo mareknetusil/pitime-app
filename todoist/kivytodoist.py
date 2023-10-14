@@ -2,6 +2,7 @@ import os
 import typing as tp
 
 from kivy.clock import Clock
+from kivy.logger import Logger
 from kivy.network.urlrequest import UrlRequest
 
 from .interface import Todoist
@@ -11,17 +12,21 @@ if tp.TYPE_CHECKING:
 
 
 class KivyTodoist(Todoist):
-    def __init__(self, timeout: int = 3):
+    def __init__(self, timeout: int = 3, period: int = 10):
         self.todo_list: Todos = []
         self._subscribers: list[tp.Callable] = []
         self._clock = None
         self.timeout = timeout
+        self.period = period
 
     def run(self) -> None:
-        self._clock = Clock.schedule_interval(self.update, 10)
+        Logger.info('STARTING REGULAR TODOIST CHECKS ...')
+        Logger.info(f'CHECKING EVERY {self.period} seconds.')
+        self._clock = Clock.schedule_interval(self.update, self.period)
         self.update()
 
     def stop(self) -> None:
+        Logger.info('STOPPING REGULAR TODOIST CHECKS')
         if self._clock:
             self._clock.cancel()
 
@@ -29,6 +34,7 @@ class KivyTodoist(Todoist):
         self._subscribers.append(subscriber)
 
     def update(self, _: int = 0) -> None:
+        Logger.info('CHECKING FOR TODOS ...')
         UrlRequest(
             url=os.getenv('TODOIST_URL'),
             req_headers={'Authorization': f'Bearer {os.getenv("TODOIST_TOKEN")}'},
@@ -40,16 +46,20 @@ class KivyTodoist(Todoist):
 
     def _on_success(self, req, resp) -> None:
         if resp == self.todo_list:
+            Logger.info('NO CHANGE IN TODOS.')
             return
 
+        Logger.info('CHANGE IN TODOS.')
         self.todo_list = sorted(resp, key=KivyTodoist.__get_date)
         for subscriber in self._subscribers:
             subscriber(self.todo_list)
 
     def _on_error(self, req, resp) -> None:
+        Logger.error('REQUEST TO TODOIST FAILED!')
         pass
     
     def close_task(self, task_id: str) -> None:
+        Logger.info('CLOSING A TASK')
         UrlRequest(
             url=f'{os.getenv("TODOIST_URL")}/{task_id}/close',
             req_headers={'Authorization': f'Bearer {os.getenv("TODOIST_TOKEN")}'},
