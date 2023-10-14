@@ -64,9 +64,6 @@ class TasksListWidget(RelativeLayout):
         self.todoist.add_subscriber(self.update_tasks)
         self.todoist.run()
 
-    def update(self, delta):
-        self.todoist.update()
-
     def update_tasks(self, tasks: 'Todos'):
         self.clear_content()
         for i, task in enumerate(tasks):
