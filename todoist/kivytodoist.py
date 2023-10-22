@@ -34,7 +34,7 @@ class KivyTodoist(Todoist):
         self._subscribers.append(subscriber)
 
     def update(self, _: int = 0) -> None:
-        Logger.info('CHECKING FOR TODOS ...')
+        Logger.debug('CHECKING FOR TODOS ...')
         UrlRequest(
             url=os.getenv('TODOIST_URL'),
             req_headers={'Authorization': f'Bearer {os.getenv("TODOIST_TOKEN")}'},
@@ -46,7 +46,7 @@ class KivyTodoist(Todoist):
 
     def _on_success(self, req, resp) -> None:
         if resp == self.todo_list:
-            Logger.info('NO CHANGE IN TODOS.')
+            Logger.debug('NO CHANGE IN TODOS.')
             return
 
         Logger.info('CHANGE IN TODOS.')
