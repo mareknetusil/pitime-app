@@ -7,7 +7,6 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
 from kivy.properties import ObjectProperty
-from kivy.clock import Clock
 from kivy.core.text import LabelBase
 
 
@@ -40,14 +39,10 @@ class AppWidget(BoxLayout):
     except FileNotFoundError:
         backlight = BlacklightDummy()
 
-    def update(self, dt):
-        self.calendar_widget.update_day()
-
 
 class PiTimeApp(App):
     def build(self):
         app = AppWidget()
-        Clock.schedule_interval(app.update, 1. / 60.)
         return app
 
 
