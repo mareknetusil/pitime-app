@@ -1,0 +1,115 @@
+
+<TaskPopup>:
+    orientation: 'vertical'
+
+    Label:
+
+        size_hint: (1, 0.6)
+        halign: 'center'
+        valign: 'center'
+        text: root.task_text
+        text_size: (self.width, None)
+
+    BoxLayout:
+        size_hint: (1, 0.4)
+        Button:
+            text: 'Ano'
+            on_press: root.dispatch('on_answer', True)
+        Button:
+            text: 'Ne'
+            on_press: root.dispatch('on_answer', False)
+
+<TasksWidget>:
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    padding: (10, 20, 0, 0)
+    orientation: 'vertical'
+
+    Label:
+        pos: 0, 0
+        size_hint: 1, 0.15
+
+        canvas.before:
+            Color:
+                rgba: 0, 0, 0, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        text: 'Úkoly'
+        text_size: self.width - 20, None
+        font_name: 'Roboto-Light'
+        font_size: '40dp'
+        halign: 'left'
+
+    TasksListWidget:
+        size_hint: 1, 0.6
+
+        canvas.before:
+            Color:
+                rgb: 0, 0, 0
+            Line:
+                points: ((0, 0), (self.width, 0))
+
+    WeatherWidget:
+        size_hint: 1, 0.25
+
+
+<TaskWidget>:
+    priority: priority_widget_id
+    due: due_widget_id
+
+    canvas.before:
+        Color:
+            rgb: 0, 0, 0
+        Line:
+            points: [self.pos, (self.x + self.width, self.y)]
+
+    PriorityWidget:
+        id: priority_widget_id
+        size_hint: (0.1, 1)
+
+    Label:
+        size_hint: (0.7, 1)
+
+        text: root.task_text
+        text_size: self.width - 20, None
+        halign: 'left'
+        color: 'black'
+        font_name: 'tahoma'
+        font_size: '17dp'
+
+    DateWidget:
+        id: due_widget_id
+        size_hint: (0.3, None)
+        height: root.height * 0.8
+
+
+<PriorityWidget>:
+    canvas.before:
+        Color:
+            rgb: 0, 0, 0
+        Ellipse:
+            pos: (13, 11)
+            size: (self.height / 2, self.height / 2)
+
+    Label:
+        text: root.text
+        font_name: 'Roboto-Black'
+        color: 'white'
+
+
+<DateWidget>:
+    canvas.before:
+        Color:
+            rgb: self.bg_color
+        Rectangle:
+            pos: self.pos
+            size: (self.width, .8 * self.height)
+
+    color: 'white'

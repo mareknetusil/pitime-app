@@ -1,0 +1,47 @@
+
+<CalendarWidget>:
+    day_num: day_num_id
+    day_of_week: day_of_week_id
+    month: month_id
+    month_cal: month_cal_id
+
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    Label:
+        size_hint: 1, 0.15
+
+    Label:
+        id: day_of_week_id
+        size_hint: 1, 0.1
+        valign: 'top'
+        font_size: '40dp'
+        font_name: 'Roboto-Light'
+
+    Label:
+        id: day_num_id
+        size_hint: 1, 0.3
+        halign: 'center'
+        font_size: '150dp'
+        font_name: 'Roboto-Black'
+
+    Label:
+        id: month_id
+        size_hint: 1, 0.1
+        font_size: '30dp'
+        font_name: 'Roboto-Light'
+
+    MonthWidget:
+        id: month_cal_id
+        size_hint: 1, 0.3
+        font_size: '20dp'
+        font_name: 'FreeMonoBold'
+
+    Label:
+        size_hint: 1, 0.05
