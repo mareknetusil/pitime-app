@@ -19,13 +19,6 @@ except (FileNotFoundError, ModuleNotFoundError):
     Blacklight = BlacklightDummy
 
 
-# from weather import Weather
-
-
-class WeatherWidget(BoxLayout):
-    weather = ObjectProperty(None)
-
-
 class AppWidget(BoxLayout):
     calendar_widget = ObjectProperty(None)
     carousel_widget = ObjectProperty(None)
