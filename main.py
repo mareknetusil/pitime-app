@@ -44,7 +44,7 @@ class AppWidget(BoxLayout):
         self.calendar_widget.update_day()
 
 
-class CalendarApp(App):
+class PiTimeApp(App):
     def build(self):
         app = AppWidget()
         Clock.schedule_interval(app.update, 1. / 60.)
@@ -60,4 +60,4 @@ if __name__ == '__main__':
     LabelBase.register(name='tahoma', fn_regular='fonts/tahoma.ttf')
     LabelBase.register(name='meteocons', fn_regular='fonts/meteocons-webfont.ttf')
 
-    CalendarApp().run()
+    PiTimeApp().run()
