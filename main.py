@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.carousel import Carousel
 from kivy.properties import ObjectProperty
 from kivy.core.text import LabelBase
 
@@ -25,10 +24,6 @@ except (FileNotFoundError, ModuleNotFoundError):
 
 class WeatherWidget(BoxLayout):
     weather = ObjectProperty(None)
-
-
-class CarouselWidget(Carousel):
-    pass
 
 
 class AppWidget(BoxLayout):

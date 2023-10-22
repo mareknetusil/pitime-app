@@ -7,13 +7,8 @@
 #:include widgets/clock.kv
 #:import ClockWidget widgets.clock.ClockWidget
 
-
-<CarouselWidget>:
-    direction: 'right'
-    loop: True
-
-    TasksWidget
-    ClockWidget
+#:include widgets/carousel.kv
+#:import CarouselWidget widgets.carousel.CarouselWidget
 
 
 <AppWidget>:
