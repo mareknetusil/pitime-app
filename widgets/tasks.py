@@ -7,7 +7,8 @@ from kivy.uix.label import Label
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.popup import Popup
 
-from todoist import KivyTodoist
+from todoist import TODOIST_KEY
+from globals import get_global
 
 if tp.TYPE_CHECKING:
     from todoist import Todoist, Todos
@@ -22,7 +23,9 @@ class TasksListWidget(RelativeLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.todoist: 'Todoist' = KivyTodoist(timeout=3)
+        self.todoist: 'Todoist' = get_global(TODOIST_KEY)
+        if not self.todoist:
+            raise ValueError('Todoist not initialized')
         self.todoist.add_subscriber(self.update_tasks)
         self.todoist.run()
 

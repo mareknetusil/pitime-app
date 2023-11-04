@@ -1,8 +1,12 @@
 import dataclasses as dc
+import uuid
 import typing as tp
 
 
 Todos = tp.List[tp.Dict[str, tp.Any]]
+
+
+TODOIST_KEY = uuid.uuid4()
 
 
 class Todoist:
