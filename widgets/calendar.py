@@ -1,4 +1,5 @@
 import calendar
+import dataclasses as dc
 import datetime as dt
 import typing as tp
 
@@ -8,7 +9,28 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.logger import Logger
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import Color, Rectangle, Line
+
+from todoist import TODOIST_KEY
+from globals import get_global
+
+
+@dc.dataclass
+class CircleSettings:
+    center_x: float
+    center_y: float
+    radius: float
+
+    @classmethod
+    def from_widget(cls, widget, radius_factor=0.9):
+        return cls(
+            center_x=widget.center_x,
+            center_y=widget.center_y,
+            radius=min(widget.width, widget.height) * radius_factor / 2
+        )
+
+    def to_tuple(self) -> tp.Tuple[float, float, float]:
+        return self.center_x, self.center_y, self.radius
 
 
 class CalendarWidget(BoxLayout):
@@ -54,6 +76,10 @@ class MonthTable(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.cols = 7
+        todoist = get_global(TODOIST_KEY)
+        if not todoist:
+            raise ValueError('Todoist not initialized')
+        todoist.add_subscriber(self.set_tasks)
 
     def create_header(self):
         for day in calendar.day_name:
@@ -83,29 +109,60 @@ class MonthTable(GridLayout):
             else:
                 self.add_widget(DayWidget(day))
 
+    def set_tasks(self, tasks) -> None:
+        remind_dates = set()
+        for task in tasks:
+            date = task.get('due', {}).get('date')
+            if date:
+                remind_dates.add(dt.datetime.strptime(date, '%Y-%m-%d').date())
+
+        for child in self.children:
+            if isinstance(child, DayWidget):
+                child.task = child.date in remind_dates
+
 
 class DayWidget(Label):
-    def __init__(self, date: dt.date, **kwargs):
+    def __init__(self, date: dt.date, task: bool = False, **kwargs):
         super().__init__(**kwargs)
         self.date = date
+        self._task = task
         self.text = str(date.day)
         self.font_name = 'FreeMonoBold'
 
-        if date == dt.date.today():
-            self._draw_today()
+        self.embellish()
 
-        self.bind(size=self._update_rect, pos=self._update_rect)
+        self.bind(size=self._update_geometry, pos=self._update_geometry)
 
-    def _draw_today(self):
+    def embellish(self):
         self.canvas.before.clear()
-        with self.canvas.before:
-            Color(1, 1, 1, 1)
-            self.rect = Rectangle(pos=self.pos, size=self.size)
-        self.color = (0, 0, 0, 1)
 
-    def _update_rect(self, instance, value):
-        if not hasattr(self, 'rect'):
-            return
+        reminder_color = (1, 1, 1, 1)
+        if self.date == dt.date.today():
+            with self.canvas.before:
+                Color(1, 1, 1, 1)
+                self.rect = Rectangle(pos=self.pos, size=self.size)
+                reminder_color = (1, 0, 0, 1)
+            self.color = (0, 0, 0, 1)
 
-        self.rect.pos = instance.pos
-        self.rect.size = instance.size
+        if self.task:
+            with self.canvas.before:
+                Color(*reminder_color)
+                circle_settings = CircleSettings.from_widget(self)
+                self.circle = Line(circle=circle_settings.to_tuple(), width=1)
+
+    @property
+    def task(self) -> bool:
+        return self._task
+
+    @task.setter
+    def task(self, task: bool):
+        self._task = task
+        self.embellish()
+
+    def _update_geometry(self, instance, value):
+        if hasattr(self, 'rect'):
+            self.rect.pos = instance.pos
+            self.rect.size = instance.size
+
+        if hasattr(self, 'circle'):
+            self.circle.circle = CircleSettings.from_widget(self).to_tuple()
