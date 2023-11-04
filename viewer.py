@@ -4,26 +4,45 @@ import inspect
 
 from kivy.app import App
 from kivy.base import Builder
+from kivy.core.text import LabelBase
 from kivy.logger import Logger
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen
+from kivy.uix.scrollview import ScrollView
 
 
-class WidgetList(BoxLayout):
+class WidgetList(GridLayout):
     def __init__(self, app, **kwargs):
         super(WidgetList, self).__init__(**kwargs)
         self.app = app
+        # self.orientation = 'vertical'
+        self.cols = 1
 
-        self.orientation = 'vertical'
         self.widget_buttons = []
 
-        label = Label(text='Available Widgets')
+        label = Label(
+            text='Available Widgets',
+            size_hint_x = None, width=200,
+            size_hint_y = None, height=50
+        )
         self.add_widget(label)
 
-        self.widget_list_layout = BoxLayout(orientation='vertical')
-        self.add_widget(self.widget_list_layout)
+        self.scrollview = ScrollView(
+            do_scroll_x=False, do_scroll_y=True,
+            size_hint_x = None, width=200,
+        )
+        self.widget_list_layout = GridLayout(
+            cols=1,
+            size_hint_x = None, width=200,
+            size_hint_y = None,
+        )
+        self.widget_list_layout.bind(
+            minimum_height=self.widget_list_layout.setter('height')
+        )
+        self.scrollview.add_widget(self.widget_list_layout)
+        self.add_widget(self.scrollview)
         self.update_widget_buttons()
 
     def update_widget_buttons(self):
@@ -33,7 +52,10 @@ class WidgetList(BoxLayout):
         self.widget_buttons = []
 
         for widget_name in self.app.available_widgets:
-            widget_button = Button(text=widget_name)
+            widget_button = Button(
+                text=widget_name,
+                size_hint_y=None, height=50
+            )
             widget_button.bind(on_press=self.load_widget)
             self.widget_buttons.append(widget_button)
             self.widget_list_layout.add_widget(widget_button)
@@ -96,7 +118,10 @@ class ViewerApp(App):
 
         layout = BoxLayout(orientation='horizontal')
 
-        self.widget_list = WidgetList(self)
+        self.widget_list = WidgetList(
+            self,
+            size_hint_x = None, width=200,
+        )
         self.viewport = ViewerViewport()
 
         layout.add_widget(self.widget_list)
@@ -119,11 +144,16 @@ class ViewerApp(App):
         widgets = [
             filename.split('.py')[0]
             for filename in os.listdir(self.widgets_directory)
-            if filename.endswith('.py')
+            if filename.endswith('.py') and not filename.startswith('_')
         ]
         Logger.info(f'Available widgets: {widgets}')
         self.available_widgets = widgets
 
 
 if __name__ == '__main__':
+    LabelBase.register(name='Roboto-Black', fn_regular='fonts/Roboto-Black.ttf')
+    LabelBase.register(name='Roboto-Light', fn_regular='fonts/Roboto-Light.ttf')
+    LabelBase.register(name='tahoma', fn_regular='fonts/tahoma.ttf')
+    LabelBase.register(name='meteocons', fn_regular='fonts/meteocons-webfont.ttf')
+
     ViewerApp().run()
