@@ -9,6 +9,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.core.text import LabelBase
 
+from globals import set_global
+from todoist import TODOIST_KEY, KivyTodoist
+
 
 class BlacklightDummy:
     brightness = 1
@@ -55,4 +58,6 @@ if __name__ == '__main__':
     LabelBase.register(name='tahoma', fn_regular='fonts/tahoma.ttf')
     LabelBase.register(name='meteocons', fn_regular='fonts/meteocons-webfont.ttf')
 
+    todoist = KivyTodoist(timeout=3)
+    set_global(TODOIST_KEY, todoist)
     PiTimeApp().run()
