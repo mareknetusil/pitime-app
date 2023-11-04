@@ -1,9 +1,10 @@
 import locale
-import typing as tp
+import sys
 
 from dotenv import load_dotenv
 
 from kivy.app import App
+from kivy.logger import Logger
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.core.text import LabelBase
@@ -34,10 +35,21 @@ class PiTimeApp(App):
         return app
 
 
+def set_czech_locale():
+    if sys.platform.startswith('win'):
+        locale.setlocale(locale.LC_TIME, 'Czech_Czech Republic.1250')
+    elif sys.platform.startswith('linux'):
+        locale.setlocale(locale.LC_TIME, 'cs_CZ.UTF-8')
+
+
 if __name__ == '__main__':
     load_dotenv()
 
-    # locale.setlocale(locale.LC_TIME, 'cs_CZ.utf8')
+    try:
+        set_czech_locale()
+    except locale.Error:
+        Logger.warning('Czech locale not found')        
+
     LabelBase.register(name='Roboto-Black', fn_regular='fonts/Roboto-Black.ttf')
     LabelBase.register(name='Roboto-Light', fn_regular='fonts/Roboto-Light.ttf')
     LabelBase.register(name='tahoma', fn_regular='fonts/tahoma.ttf')
