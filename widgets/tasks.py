@@ -24,6 +24,8 @@ class TasksListWidget(RelativeLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.todoist: 'Todoist' = get_global(TODOIST_KEY)
+        if not self.todoist:
+            raise ValueError('Todoist not initialized')
         self.todoist.add_subscriber(self.update_tasks)
         self.todoist.run()
 
