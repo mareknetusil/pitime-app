@@ -88,7 +88,7 @@ class MonthTable(GridLayout):
                 font_name='FreeMonoBold'
             ))
 
-    def month_days(self, date: dt.date) -> tp.Iterator[dt.date | None]:
+    def month_days(self, date: dt.date) -> tp.Iterator[tp.Union[dt.date, None]]:
         first_day_of_month = date.replace(day=1)
         first_day_of_week = first_day_of_month.weekday()
         days_in_month = calendar.monthrange(

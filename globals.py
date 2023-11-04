@@ -3,7 +3,7 @@ import typing as tp
 if tp.TYPE_CHECKING:
     from uuid import UUID
 
-GLOBALS: 'dict[UUID, tp.Any]' = {}
+GLOBALS: 'tp.Dict[UUID, tp.Any]' = {}
 
 
 def get_global(key: 'UUID') -> tp.Any:
