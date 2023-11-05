@@ -15,22 +15,29 @@ from todoist import TODOIST_KEY
 from globals import get_global
 
 
-@dc.dataclass
-class CircleSettings:
-    center_x: float
-    center_y: float
-    radius: float
+# @dc.dataclass
+# class CircleSettings:
+#     center_x: float
+#     center_y: float
+#     radius: float
 
-    @classmethod
-    def from_widget(cls, widget, radius_factor=0.9):
-        return cls(
-            center_x=widget.center_x,
-            center_y=widget.center_y,
-            radius=min(widget.width, widget.height) * radius_factor / 2
-        )
+#     @classmethod
+#     def from_widget(cls, widget, radius_factor=0.9):
+#         return cls(
+#             center_x=widget.center_x,
+#             center_y=widget.center_y,
+#             radius=min(widget.width, widget.height) * radius_factor / 2
+#         )
 
-    def to_tuple(self) -> tp.Tuple[float, float, float]:
-        return self.center_x, self.center_y, self.radius
+#     def to_tuple(self) -> tp.Tuple[float, float, float]:
+#         return self.center_x, self.center_y, self.radius
+
+def circle_settings_from_widget(widget, radius_factor=1.):
+    return (
+        widget.center_x,
+        widget.center_y,
+        min(widget.width, widget.height) * radius_factor / 2
+    )
 
 
 class CalendarWidget(BoxLayout):
@@ -152,8 +159,8 @@ class DayWidget(Label):
         if self.task:
             with self.canvas.before:
                 Color(*reminder_color)
-                circle_settings = CircleSettings.from_widget(self)
-                self.circle = Line(circle=circle_settings.to_tuple(), width=1)
+                circle_settings = circle_settings_from_widget(self)
+                self.circle = Line(circle=circle_settings, width=1)
 
     @property
     def task(self) -> bool:
@@ -173,4 +180,4 @@ class DayWidget(Label):
             self.rect.size = instance.size
 
         if hasattr(self, 'circle'):
-            self.circle.circle = CircleSettings.from_widget(self).to_tuple()
+            self.circle.circle = circle_settings_from_widget(self)
