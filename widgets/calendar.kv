@@ -37,11 +37,25 @@
         font_size: '30dp'
         font_name: 'Roboto-Light'
 
-    MonthTable:
-        id: month_cal_id
+    AnchorLayout:
         size_hint: 1, 0.3
-        font_size: '20dp'
-        font_name: 'FreeMonoBold'
+
+        MonthTable:
+            id: month_cal_id
+            font_size: '20dp'
+            font_name: 'FreeMonoBold'
+            padding: 10
 
     Label:
         size_hint: 1, 0.05
+
+
+<DayLabel>:
+    font_name: 'FreeMonoBold'
+    font_size: '20dp'
+
+
+<DayWidget>:
+    font_name: 'FreeMonoBold'
+    font_size: '20dp'
+    size: ('20dp', '20dp')
