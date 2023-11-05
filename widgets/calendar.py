@@ -83,7 +83,7 @@ class MonthTable(GridLayout):
 
     def create_header(self):
         for day in calendar.day_name:
-            self.add_widget(Label(
+            self.add_widget(DayLabel(
                 text=day[:2],
                 font_name='FreeMonoBold'
             ))
@@ -121,16 +121,21 @@ class MonthTable(GridLayout):
                 child.task = child.date in remind_dates
 
 
+class DayLabel(Label):
+    pass
+
+
 class DayWidget(Label):
     def __init__(self, date: dt.date, task: bool = False, **kwargs):
         super().__init__(**kwargs)
         self.date = date
         self._task = task
         self.text = str(date.day)
-        self.font_name = 'FreeMonoBold'
+        # self.font_name = 'FreeMonoBold'
 
         self.embellish()
 
+        # self.bind(height=self._update_min_width)
         self.bind(size=self._update_geometry, pos=self._update_geometry)
 
     def embellish(self):
@@ -158,6 +163,9 @@ class DayWidget(Label):
     def task(self, task: bool):
         self._task = task
         self.embellish()
+
+    def _update_min_width(self, instance, value):
+        self.width = max(self.width, value)
 
     def _update_geometry(self, instance, value):
         if hasattr(self, 'rect'):
