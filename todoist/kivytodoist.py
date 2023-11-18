@@ -56,14 +56,18 @@ class KivyTodoist(Todoist):
 
     def _on_error(self, req, resp) -> None:
         Logger.error('REQUEST TO TODOIST FAILED!')
-        pass
+        Logger.error(resp)
     
     def close_task(self, task_id: str) -> None:
-        Logger.info('CLOSING A TASK')
+        Logger.info(f'CLOSING A TASK: {task_id}')
         UrlRequest(
             url=f'{os.getenv("TODOIST_URL")}/{task_id}/close',
             req_headers={'Authorization': f'Bearer {os.getenv("TODOIST_TOKEN")}'},
-            timeout=self.timeout
+            req_body=b'',
+            timeout=self.timeout,
+            on_success=lambda _req, _resp: self.update(),
+            on_failure=self._on_error,
+            on_error=self._on_error
         )
 
     @staticmethod
