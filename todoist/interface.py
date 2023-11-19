@@ -14,8 +14,8 @@ class Due(BaseModel):
     string: str
     date: str
     is_recurring: bool
-    datetime: str | None = None
-    timezone: str | None = None
+    datetime: tp.Optional[str] = None
+    timezone: tp.Optional[str] = None
 
 
 class Duration(BaseModel):
@@ -26,22 +26,22 @@ class Duration(BaseModel):
 class Task(BaseModel):
     id: str
     project_id: str
-    section_id: str | None = None
+    section_id: tp.Optional[str] = None
     content: str
     description: str
     is_completed: bool
     labels: tp.List[str]
-    parent_id: str | None = None
+    parent_id: tp.Optional[str] = None
     order: int
     priority: int
-    due: Due | None = None
+    due: tp.Optional[Due] = None
     url: str
     comment_count: int
     created_at: str
     creator_id: str
-    assignee_id: str | None = None
-    assigner_id: str | None = None
-    duration: Duration | None = None
+    assignee_id: tp.Optional[str] = None
+    assigner_id: tp.Optional[str] = None
+    duration: tp.Optional[Duration] = None
 
 
 Todos = tp.List[Task]
