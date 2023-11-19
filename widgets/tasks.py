@@ -11,7 +11,7 @@ from todoist import TODOIST_KEY
 from globals import get_global
 
 if tp.TYPE_CHECKING:
-    from todoist import Todoist, Todos
+    from todoist import Todoist, Todos, Task, Due
 
 
 class TasksWidget(BoxLayout):
@@ -58,12 +58,12 @@ class TaskWidget(BoxLayout):
         self.set_task(task)
         self.register_event_type('on_close_task')
 
-    def set_task(self, task: 'tp.Dict[str, tp.Any]'):
-        task_text = task['content']
+    def set_task(self, task: 'Task'):
+        task_text = task.content
         self.task_text = task_text if len(task_text) <= 55 else task_text[:55] + '...'
-        self.task_id = str(task['id'])
-        self.priority.text = str(task['priority'])
-        self.due.set_due(task.get('due', {}))
+        self.task_id = task.id
+        self.priority.text = str(task.priority)
+        self.due.set_due(task.due)
 
     def on_touch_down(self, touch):
         if not self.collide_point(*touch.pos):
@@ -109,11 +109,11 @@ class PriorityWidget(RelativeLayout):
 class DateWidget(Label):
     bg_color = ObjectProperty((0, 0, 0))
 
-    def set_due(self, due: 'tp.Dict[str, tp.Any]'):
-        if 'date' in due:
-            date = dt.datetime.fromisoformat(due['date']).date()
+    def set_due(self, due: 'Due'):
+        if due.date:
+            date = dt.datetime.fromisoformat(due.date).date()
             day_diff = (date - dt.date.today()).days
             max_light = 0x88 / 256
             bg_shade = min(7, max(0, day_diff)) / 7 * max_light
             self.bg_color = (bg_shade, bg_shade, bg_shade)
-        self.text = due.get('string', '')
+        self.text = due.string

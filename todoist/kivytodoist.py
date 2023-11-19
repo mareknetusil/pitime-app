@@ -5,7 +5,7 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.network.urlrequest import UrlRequest
 
-from .interface import Todoist
+from .interface import Todoist, Task
 
 if tp.TYPE_CHECKING:
     from .interface import Todos
@@ -45,12 +45,15 @@ class KivyTodoist(Todoist):
         )
 
     def _on_success(self, req, resp) -> None:
-        if resp == self.todo_list:
+        resp_tasks = [
+            Task(**task) for task in resp
+        ]
+        if resp_tasks == self.todo_list:
             Logger.debug('NO CHANGE IN TODOS.')
             return
 
         Logger.info('CHANGE IN TODOS.')
-        self.todo_list = sorted(resp, key=KivyTodoist.__get_date)
+        self.todo_list = sorted(resp_tasks, key=KivyTodoist.__get_date)
         for subscriber in self._subscribers:
             subscriber(self.todo_list)
 
@@ -71,9 +74,5 @@ class KivyTodoist(Todoist):
         )
 
     @staticmethod
-    def __get_date(task: tp.Dict[str, tp.Any]) -> str:
-        try:
-            return task['due']['date']
-        except KeyError:
-            return '' 
-
+    def __get_date(task: Task) -> str:
+        return task.due.date if task.due else ''

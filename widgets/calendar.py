@@ -14,6 +14,9 @@ from kivy.graphics import Color, Rectangle, Line
 from todoist import TODOIST_KEY
 from globals import get_global
 
+if tp.TYPE_CHECKING:
+    from todoist import Todos, Task
+
 
 # @dc.dataclass
 # class CircleSettings:
@@ -116,10 +119,10 @@ class MonthTable(GridLayout):
             else:
                 self.add_widget(DayWidget(day))
 
-    def set_tasks(self, tasks) -> None:
+    def set_tasks(self, tasks: 'Todos') -> None:
         remind_dates = set()
         for task in tasks:
-            date = task.get('due', {}).get('date')
+            date = task.due.date if task.due else None
             if date:
                 remind_dates.add(dt.datetime.strptime(date, '%Y-%m-%d').date())
 
