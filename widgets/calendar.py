@@ -66,8 +66,9 @@ class CalendarWidget(BoxLayout):
         self.month_cal.show_month_of_date(today)
 
     def _schedule_update(self):
-        next_update = self._next_update()
-        next_in_secs = (next_update - dt.datetime.now()).total_seconds()
+        # next_update = self._next_update()
+        # next_in_secs = (next_update - dt.datetime.now()).total_seconds()
+        next_update, next_in_secs = self._next_update()
         Logger.info(
             f'NEXT CALENDAR UPDATE AT {next_update} O\'CLOCK, '
             f'IN {next_in_secs} SECONDS.'
@@ -75,11 +76,14 @@ class CalendarWidget(BoxLayout):
         Clock.schedule_once(self.update, next_in_secs)
 
     @staticmethod
-    def _next_update() -> dt.datetime:
+    # def _next_update() -> dt.datetime:
+    def _next_update() -> tp.Tuple[dt.datetime, float]:
         now = dt.datetime.now()
         next_update = now.replace(hour=0, minute=0, second=1) + \
-                      dt.timedelta(days=1)
-        return next_update
+                      dt.timedelta(days=1 if now.hour > 0 else 0)
+        next_in_secs = (next_update - now).total_seconds()
+        # return next_update
+        return next_update, next_in_secs
 
 
 class MonthTable(GridLayout):
