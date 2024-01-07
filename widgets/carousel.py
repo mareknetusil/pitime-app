@@ -3,7 +3,7 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.properties import NumericProperty
 
-from .clock import ClockWidget
+from .mainscreen import MainScreenWidget
 from .tasks import TasksWidget
 
 
@@ -14,7 +14,7 @@ class CarouselWidget(Carousel):
         super().__init__(**kwargs)
 
         self.return_event = None
-        self.clock_widget = ClockWidget()
+        self.clock_widget = MainScreenWidget()
 
         self.add_widget(self.clock_widget)
         self.add_widget(TasksWidget())

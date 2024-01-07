@@ -11,6 +11,7 @@ from kivy.core.text import LabelBase
 
 from globals import set_global
 from todoist import TODOIST_KEY, KivyTodoist
+from weather import WEATHER_KEY, Weather
 
 
 class BlacklightDummy:
@@ -60,4 +61,7 @@ if __name__ == '__main__':
 
     todoist = KivyTodoist(timeout=3)
     set_global(TODOIST_KEY, todoist)
+    weather = Weather()
+    set_global(WEATHER_KEY, weather)
+    weather.query_weather()
     PiTimeApp().run()

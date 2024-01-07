@@ -1,6 +1,11 @@
+import uuid
 import os
 
 import requests
+
+
+WEATHER_KEY = uuid.uuid4()
+
 
 class Weather:
     def __init__(self):
