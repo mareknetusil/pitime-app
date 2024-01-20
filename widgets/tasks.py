@@ -27,7 +27,6 @@ class TasksListWidget(RelativeLayout):
         if not self.todoist:
             raise ValueError('Todoist not initialized')
         self.todoist.add_subscriber(self.update_tasks)
-        self.todoist.run()
 
     def update_tasks(self, tasks: 'Todos'):
         self.clear_content()

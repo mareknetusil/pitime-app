@@ -8,7 +8,7 @@ from .clock import ClockWidget
 from .weather import WeatherWidget
 
 from todoist import TODOIST_KEY
-from weather import WEATHER_KEY
+from weather.interface import WEATHER_KEY
 from globals import get_global
 
 if tp.TYPE_CHECKING:
