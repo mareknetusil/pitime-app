@@ -1,4 +1,5 @@
 import typing as tp
+from statistics import mean
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
@@ -35,17 +36,21 @@ class WeatherWidget(BoxLayout):
 
     def update_weather(self, weather: 'CurrentWeather') -> None:
         self.current_weather.icon.text = icons_list[weather.weather[0].icon]
-        self.current_weather.temp.text = str(int(weather.main.temp) - 273) + 'C'
+        self.current_weather.temp.text = str(int(weather.main.temp) - 273) + '°'
 
     def update_forecast(self, forecast: 'Forecast') -> None:
-        self.forecast_1h.icon.text = icons_list[forecast.list[0].weather[0].icon]
-        self.forecast_1h.temp.text = (
-            f'{int(forecast.list[0].main.temp_min) - 273}C \ '
-            f'{int(forecast.list[0].main.temp_max) - 273}C'
-        )
+        forecast_1h = forecast.list[0]
+        self.forecast_1h.icon.text = icons_list[forecast_1h.weather[0].icon]
+        temp_1h = mean([
+            int(forecast_1h.main.temp_min),
+            int(forecast_1h.main.temp_max)
+        ])
+        self.forecast_1h.temp.text = (f'{temp_1h - 273}°')
 
-        self.forecast_3h.icon.text = icons_list[forecast.list[2].weather[0].icon]
-        self.forecast_3h.temp.text = (
-            f'{int(forecast.list[0].main.temp_min) - 273}C \ '
-            f'{int(forecast.list[0].main.temp_max) - 273}C'
-        )
+        forecast_3h = forecast.list[2]
+        self.forecast_3h.icon.text = icons_list[forecast_3h.weather[0].icon]
+        temp_3h = mean([
+            int(forecast_3h.main.temp_min),
+            int(forecast_3h.main.temp_max)
+        ])
+        self.forecast_3h.temp.text = (f'{temp_3h - 273}°')
