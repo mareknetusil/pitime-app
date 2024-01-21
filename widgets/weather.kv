@@ -1,1 +1,29 @@
+<WeatherInfoWidget>:
+    icon: icon_id
+    temp: temp_id
+
+    orientation: 'vertical'
+
+    Label:
+        id: icon_id
+        font_size: '60dp'
+        font_name: 'meteocons'
+
+    Label:
+        id: temp_id
+        font_size: '20dp'
+        font_name: 'Roboto-Regular'
+
 <WeatherWidget>:
+    current_weather: weather_id
+    forecast_1h: forecast_1h_id
+    forecast_3h: forecast_3h_id
+
+    WeatherInfoWidget:
+        id: weather_id 
+
+    WeatherInfoWidget:
+        id: forecast_1h_id
+
+    WeatherInfoWidget:
+        id: forecast_3h_id

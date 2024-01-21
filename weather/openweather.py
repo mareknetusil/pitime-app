@@ -15,7 +15,7 @@ class OpenWeather:
     def __init__(self, timeout: int = 3, period: int = 60):
         self.weather: 'tp.Optional[CurrentWeather]' = None
         self.forecast: 'tp.Optional[Forecast]' = None
-        self._subscribers = []
+        self._subscribers: 'tp.List[tp.Dict[InfoType, tp.Callable]]' = []
         self._clock = None
         self.timeout = timeout
         self.period = period
@@ -31,7 +31,7 @@ class OpenWeather:
         if self._clock:
             self._clock.cancel()
 
-    def add_subscriber(self, subscriber) -> None:
+    def add_subscriber(self, subscriber: 'tp.Dict[InfoType, tp.Callable]') -> None:
         self._subscribers.append(subscriber)
 
     def update(self, _: int = 0) -> None:
@@ -70,7 +70,9 @@ class OpenWeather:
             Logger.info(f'CHANGE IN {attr_name.upper()}.')
             setattr(self, attr_name, resp_obj)
             for subscriber in self._subscribers:
-                subscriber(attr, resp_obj)
+                callback = subscriber.get(attr)
+                if callback:
+                    callback(resp_obj)
 
         return _on_success
 
