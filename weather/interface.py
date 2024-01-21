@@ -54,7 +54,7 @@ class CurrSys(BaseModel):
 
 class CurrentWeather(BaseModel):
     coord: Coord
-    weather: list[Weather]
+    weather: tp.List[Weather]
     base: str
     main: Main
     visibility: int
@@ -86,7 +86,7 @@ class ForeSys(BaseModel):
 class ForecastWeather(BaseModel):
     dt: int
     main: Main
-    weather: list[Weather]
+    weather: tp.List[Weather]
     clouds: Clouds
     wind: Wind
     visibility: int
@@ -99,7 +99,7 @@ class Forecast(BaseModel):
     cod: str
     message: int
     cnt: int
-    list: list[ForecastWeather]
+    list: tp.List[ForecastWeather]
     city: City
 
 MODELS = {
