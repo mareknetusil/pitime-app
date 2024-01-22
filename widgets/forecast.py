@@ -71,7 +71,10 @@ class ForecastGraph(Graph):
             y_start -= y1[1] / 2.
             y1 = y1[0]
             for k in range(len(ylabels)):
-                ylabels[k].text = precision % funcexp(ypoints[k])
+                if k == 0:
+                    ylabels[k].text = ''
+                else:
+                    ylabels[k].text = precision % funcexp(ypoints[k])
                 ylabels[k].texture_update()
                 ylabels[k].size = ylabels[k].texture_size
                 y1 = max(y1, ylabels[k].texture_size[0])
@@ -146,14 +149,13 @@ class ForecastWidget(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
         self.graph = ForecastGraph(
-            xlabel='Den', ylabel='Teplota',
             x_ticks_minor=1, x_ticks_major=2, y_ticks_major=10,
             y_grid_label=True, x_grid_label=True,
             padding=5,
             x_grid=True, y_grid=True,
-            xmin=0, xmax=16, ymin=-10, ymax=40,
+            xmin=0, xmax=16, ymin=-20, ymax=40,
             label_options={
-                'font_family': 'Roboto'
+                'font_family': 'Roboto-Bold'
             },
         )
         self.plot = MeshLinePlot(color=[1, 0, 0, 1])
@@ -172,19 +174,17 @@ class ForecastWidget(BoxLayout):
         weather_api = get_global(WEATHER_KEY)
         weather_api.add_subscriber({InfoType.Forecast: self.update_forecast})
 
-    def get_time_label(self, x: int) -> str:
-        Logger.info(f'{timestamp}')
-        timestamp = dt.datetime.fromtimestamp(self.timestamps[x])
-        return timestamp.strftime('%d.%m')
+    @staticmethod
+    def get_time_label(timestamp: int) -> str:
+        timestamp = dt.datetime.fromtimestamp(timestamp)
+        return timestamp.strftime('%H:%M')
 
     def update_forecast(self, forecast: Forecast):
         self.temperatures = [weather.main.temp for weather in forecast.list]
         self.timestamps = [
-            dt.datetime.fromtimestamp(weather.dt).strftime('%H:%M')
+            f'{self.get_time_label(weather.dt)}\n{weather.main.temp - 273:.1f}°'
             for weather in forecast.list
         ]
-        Logger.warning(f'{self.temperatures}')
-        Logger.warning(f'{self.timestamps}')
         self.plot.points = [
             (x, temp - 273)
             for x, temp in enumerate(self.temperatures)
