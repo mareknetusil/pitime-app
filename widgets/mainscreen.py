@@ -33,14 +33,13 @@ class MainScreenWidget(BoxLayout):
     def update_tasks(self, tasks: 'Todos'):
         today = dt.date.today()
         bound = today + dt.timedelta(days=3)
-        due_dates = [task.due.date for task in tasks if task.due]
-        print(due_dates)
         due_dates = [
             dt.datetime.strptime(task.due.date, '%Y-%m-%d').date()
-            for task in tasks if task.due
+            if task.due else None
+            for task in tasks
         ]
         today_tasks = sum(
             1 for due_date in due_dates
-            if due_date <= bound
+            if due_date is None or due_date <= bound
         )
         self.tasks.text = TASKS_TEXT_TEMPLATE.format(today_tasks) if today_tasks else ''

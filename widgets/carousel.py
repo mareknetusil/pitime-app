@@ -5,6 +5,7 @@ from kivy.properties import NumericProperty
 
 from .mainscreen import MainScreenWidget
 from .tasks import TasksWidget
+from .forecast import ForecastWidget
 
 
 class CarouselWidget(Carousel):
@@ -18,6 +19,7 @@ class CarouselWidget(Carousel):
 
         self.add_widget(self.clock_widget)
         self.add_widget(TasksWidget())
+        self.add_widget(ForecastWidget())
 
         self.bind(current_slide=self.on_current_slide)
 
