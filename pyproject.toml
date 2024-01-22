@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kalendar"
-version = "0.5.2"
+version = "0.6.0"
 description = ""
 authors = ["netusil <m.netusil@mikrovox.cz>"]
 readme = "README.md"
