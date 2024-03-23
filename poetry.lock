@@ -138,6 +138,7 @@ dev = ["pytest (>=3.6)", "pytest-cov", "pytest-asyncio", "sphinx-rtd-theme"]
 [package.source]
 type = "url"
 url = "https://github.com/kivy-garden/graph/archive/master.zip"
+
 [[package]]
 name = "mypy"
 version = "1.4.1"
@@ -241,6 +242,14 @@ python-versions = ">=3.7"
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "pytz"
+version = "2024.1"
+description = "World timezone definitions, modern and historical"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pywin32"
 version = "306"
 description = "Python for Window Extensions"
@@ -327,7 +336,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "flake8 (<5)", "pytest-co
 [metadata]
 lock-version = "1.1"
 python-versions = "3.7.*"
-content-hash = "08facd8f89ddd0248c2d915b9307af2757e2b6bb9a336707f11035c35ae76b2e"
+content-hash = "4316cc3bbf9df0e61ce6fa8f8e8662033905ba6177312bdc618761c651ce53bc"
 
 [metadata.files]
 annotated-types = []
@@ -350,6 +359,7 @@ pydantic-core = []
 pygments = []
 pypiwin32 = []
 python-dotenv = []
+pytz = []
 pywin32 = []
 requests = []
 rpi-backlight = []
