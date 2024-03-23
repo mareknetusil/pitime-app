@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kalendar"
-version = "0.6.0"
+version = "0.6.1"
 description = ""
 authors = ["netusil <m.netusil@mikrovox.cz>"]
 readme = "README.md"
@@ -12,6 +12,7 @@ kivy = {extras = ["base"], version = "^2.1.0"}
 python-dotenv = "^0.21.0"
 pydantic = "^2.5.1"
 "kivy-garden.graph" = {url = "https://github.com/kivy-garden/graph/archive/master.zip"}
+pytz = "^2024.1"
 
 
 [tool.poetry.dev-dependencies]
