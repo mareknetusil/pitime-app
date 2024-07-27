@@ -17,6 +17,11 @@ class Due(BaseModel):
     datetime: tp.Optional[str] = None
     timezone: tp.Optional[str] = None
 
+    def __lt__(self, other: 'tp.Optional[Due]') -> bool:
+        if other is None:
+            return False
+        return self.date < other.date
+
 
 class Duration(BaseModel):
     amount: str
