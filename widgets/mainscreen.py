@@ -1,6 +1,7 @@
 import datetime as dt
 import typing as tp
 
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
@@ -33,6 +34,7 @@ class MainScreenWidget(BoxLayout):
         self.add_widget(self.clock)
         self.add_widget(self.weather)
 
+        Clock.schedule_interval(self.update_first_kid, 3_600.)
         self.update_first_kid()
 
     def update_first_kid(self):
