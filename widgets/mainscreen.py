@@ -37,7 +37,7 @@ class MainScreenWidget(BoxLayout):
         Clock.schedule_interval(self.update_first_kid, 3_600.)
         self.update_first_kid()
 
-    def update_first_kid(self):
+    def update_first_kid(self, dt: int):
         kids = [ 'Nany', 'Matěj']
         choice = (dt.date.today() - dt.date(2000, 1, 1)).days % 2
         self.first.text = FIRST_KID_TEMPLATE.format(kids[choice])
