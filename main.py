@@ -60,7 +60,7 @@ if __name__ == '__main__':
     LabelBase.register(name='meteocons', fn_regular='fonts/meteocons-webfont.ttf')
 
     todoist = ComposeTodoist(
-        Birthdays('birthdays.txt'),
+        Birthdays('static/birthdays.txt'),
         KivyTodoist(timeout=3),
     )
     set_global(TODOIST_KEY, todoist)
