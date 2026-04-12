@@ -1,0 +1,17 @@
+target := "ghcr.io/cross-rs/armv7-unknown-linux-gnueabihf:main"
+pi := "pitime"
+bin := "pi-time"
+
+# Run locally on dev
+run:
+    cargo run
+
+# Rest tests on dev
+test:
+    cargo test
+
+# Cross-compile and deploy
+deploy:
+    cross build --release
+    scp target/{{target}}/release/{{bin}} {{pi}}:~/
+    ssh -t {{pi}} './{{bin}}'
