@@ -1,3 +1,4 @@
+import logging
 import os
 import typing as tp
 
@@ -9,6 +10,9 @@ from .interface import Todoist, Task
 
 if tp.TYPE_CHECKING:
     from .interface import Todos
+
+
+log = logging.getLogger(__name__)
 
 
 class KivyTodoist(Todoist):
@@ -45,9 +49,15 @@ class KivyTodoist(Todoist):
         )
 
     def _on_success(self, req, resp) -> None:
-        resp_tasks = [
-            Task(**task) for task in resp
-        ]
+        try:
+            results = resp["results"]
+            resp_tasks = [
+                Task(**task) for task in results
+            ]
+        except Exception as e:
+            log.exception(f"Failed to process the response! \n{resp}")
+            raise e
+            
         if resp_tasks == self.todo_list:
             Logger.debug('NO CHANGE IN TODOS.')
             return
