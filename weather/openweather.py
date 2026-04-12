@@ -62,7 +62,12 @@ class OpenWeather:
         attr_name = attr.value
         model = MODELS[attr]
         def _on_success(req, resp) -> None:
-            resp_obj = model(**resp)
+            try:
+                resp_obj = model(**resp)
+            except Exception as e:  # FIXME: Narrow down the exception
+                Logger.error(f'REQUEST TO {attr_name.upper()} HAS WEIRD DATA!')
+                return
+                
             if resp_obj == getattr(self, attr_name):
                 Logger.debug(f'NO CHANGE IN {attr_name.upper()}.')
                 return
